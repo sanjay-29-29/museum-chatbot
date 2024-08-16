@@ -1,0 +1,15 @@
+datasource db {
+  provider = "postgres"
+  url      = "postgresql://pc:pc@localhost:5432/sih"
+}
+
+generator client {
+    provider = "prisma-client-py"
+    recursive_type_depth = 5
+}
+
+model Ticket {
+  id        String  @id @default(uuid())  
+  person    Int
+  Validity  DateTime
+}
