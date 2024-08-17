@@ -4,12 +4,14 @@ datasource db {
 }
 
 generator client {
-    provider = "prisma-client-py"
-    recursive_type_depth = 5
+  provider             = "prisma-client-py"
+  recursive_type_depth = 5
 }
 
 model Ticket {
-  id        String  @id @default(uuid())  
-  person    Int
-  Validity  DateTime
+  id            String   @id @default(uuid())
+  quantity      Int
+  creation_time DateTime
+  expiry_time   DateTime
+  used          Int      @default(0)
 }
