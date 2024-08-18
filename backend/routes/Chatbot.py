@@ -1,30 +1,13 @@
 import torch
 from typing import Optional, Dict
-import os
+from routes.model.load_model import initialize_model
+from routes.helper.generate_ticket import generateTicket
 import random
-from flask import request, jsonify, make_response
+from flask import request, jsonify
 from routes.model.nltk_utils import bag_of_words, tokenize
 from flask_restful import Resource
-from routes.model.model import NeuralNet
-from dotenv import load_dotenv
-import json
 
-def initialize_model():
-    with open(os.getenv('INTENTS_PATH'), 'r') as json_data:
-        intents = json.load(json_data)
-    load_dotenv()
-    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    data = torch.load(os.getenv('MODEL_PATH'))
-    input_size = data["input_size"]
-    hidden_size = data["hidden_size"]
-    output_size = data["output_size"]
-    all_words = data['all_words']
-    tags = data['tags']
-    model_state = data["model_state"]
-    model = NeuralNet(input_size, hidden_size, output_size).to(device)
-    model.load_state_dict(model_state)
-    model.eval()
-    return model, device, data, all_words, tags, intents
+user_states = {}
 
 class Chatbot(Resource):
     def __init__(self):
@@ -35,9 +18,37 @@ class Chatbot(Resource):
 
         try:
             message: str = data['message']
-        except:
-            return jsonify({"message" : "please enter a message"})
+            user_id: str = data['user_id']
+        except KeyError:
+            return jsonify({"type":"message","message": "please enter a message and user_id"})
         
+        user_state = user_states.get(user_id, {'awaiting_confirmation': False, 'no_of_tickets': False})
+
+        if user_state['awaiting_confirmation']:
+            if 'yes' in message.lower():
+                user_states[user_id] = {'awaiting_confirmation': False, 'no_of_tickets': True}
+                return jsonify({"type":"message","message": "How many tickets would you like to book?"})
+            elif 'no' in message.lower():
+                user_states[user_id] = {'awaiting_confirmation': False, 'no_of_tickets': False}
+                return jsonify({"type":"message","message": "Okay, let me know if you need anything else."})
+            else:
+                return jsonify({"type":"message","message": "Please respond with 'yes' or 'no'."})
+
+        if user_state['no_of_tickets']:
+            if 'cancel' in message.lower():
+                user_states[user_id] = {'awaiting_confirmation': False, 'no_of_tickets': False}
+                return jsonify({"type":"message","message": "Booking has been cancelled."})
+            try:
+                no_of_tickets = int(message)
+                user_states[user_id] = {'awaiting_confirmation': False, 'no_of_tickets': False}
+                response = generateTicket(no_of_tickets,4)
+                if(response[0]):
+                    return jsonify({"type":"content","message": f"Booking {no_of_tickets} tickets. Thank you!", "pdf":response[1]})
+                else:
+                    return jsonify({"type":"message","message": "The museum is full right now. Please try again later"})
+            except ValueError:
+                return jsonify({"type":"message","message": "Please enter a valid number of tickets or type 'cancel' to cancel the booking."})
+
         sentence = tokenize(message)
         X = bag_of_words(sentence, self.all_words)
         X = X.reshape(1, X.shape[0])
@@ -53,8 +64,13 @@ class Chatbot(Resource):
         if prob.item() > 0.90:
             for intent in self.intents['intents']:
                 if tag == intent["tag"]:
-                    return jsonify({"message": random.choice(intent['responses'])})
-        
-        return jsonify("Ask me relevant questions")
-                
+                    if tag == 'book_ticket':
+                        user_states[user_id] = {'awaiting_confirmation': True, 'no_of_tickets': False}
+                        return jsonify({"type":"message","message": f'The ticket price is $20. Please enter "yes" to continue or "no" to cancel the process.'})
+                    else:   
+                        return jsonify({"type":"message","message": random.choice(intent['responses'])})
+
+        return jsonify({"type":"message","message": "Ask me relevant questions"})
+
+                        
         

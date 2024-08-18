@@ -1,8 +1,7 @@
 backend/migrations
-backend/routes/__pycache__
-backend/routes/model/__pycache__
 backend/data.pth
 backend/intents.json
 backend/.env
-chatbot-deployment/__pycache__
 data.pth
+
+**/__pycache__/
