@@ -1,0 +1,11 @@
+pyqrcode 
+prisma
+flask 
+flask_cors 
+torch 
+flask_restful 
+asyncio 
+nltk 
+weasyprint 
+numpy
+asyncio
