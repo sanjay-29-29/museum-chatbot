@@ -31,6 +31,15 @@ class QRValidatorIn(Resource):
         if(ticket is None):
             return Response(jsonify({"error": "The given ticketId is not valid"}), 400)
         
+        qr_time = datetime.strptime(ticket.time, '%Y-%m-%d %H:%M:%S.%f') 
+        current_time = datetime.now()
+
+        if qr_time < current_time:
+            return Response(jsonify({"error": "The QR code has expired"}), 400)
+        
+
+
+        
         if(ticket.quantity == ticket.person_in):
             return Response(jsonify({"error": "already reached max limit"}), 400)
                  
