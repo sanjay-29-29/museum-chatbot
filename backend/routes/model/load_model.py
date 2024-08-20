@@ -6,9 +6,9 @@ import json
 
 
 def initialize_model():
+    load_dotenv()
     with open(os.getenv('INTENTS_PATH'), 'r') as json_data:
         intents = json.load(json_data)
-    load_dotenv()
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     data = torch.load(os.getenv('MODEL_PATH'))
     input_size = data["input_size"]

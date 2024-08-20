@@ -1,0 +1,220 @@
+{
+  "intents": [
+    {
+      "tag": "greeting",
+      "patterns": [
+        "Hi",
+        "Hey",
+        "How are you",
+        "Is anyone there?",
+        "Hello",
+        "Good day"
+      ],
+      "responses": [
+        "Hey :-)",
+        "Hello, thanks for visiting",
+        "Hi there, what can I do for you?",
+        "Hi there, how can I help?"
+      ]
+    },
+    {
+      "tag": "goodbye",
+      "patterns": [
+        "Bye",
+        "See you later",
+        "Goodbye"
+      ],
+      "responses": [
+        "See you later, thanks for visiting",
+        "Have a nice day",
+        "Bye! Come back again soon."
+      ]
+    },
+    {
+      "tag": "thanks",
+      "patterns": [
+        "Thanks",
+        "Thank you",
+        "That's helpful",
+        "Thank's a lot!"
+      ],
+      "responses": [
+        "Happy to help!",
+        "Any time!",
+        "My pleasure"
+      ]
+    },
+    {
+      "tag": "payments",
+      "patterns": [
+        "Do you take credit cards?",
+        "Do you accept Mastercard?",
+        "Can I pay with Paypal?",
+        "Are you cash only?"
+      ],
+      "responses": [
+        "We accept UPI payments.",
+        "Currently, we only accept UPI payments.",
+        "You can pay using UPI.",
+        "At the moment, we only support UPI for payments."
+      ]
+    },
+    {
+      "tag": "book_ticket",
+      "patterns": [
+        "I want to book a ticket",
+        "Can I book a ticket?",
+        "How do I book a ticket?",
+        "I need a ticket for the museum",
+        "Can you help me book a museum ticket?"
+      ],
+      "responses": [
+        "book_tickets"
+      ]
+    },
+    {
+      "tag": "ticket_price",
+      "patterns": [
+        "What is the price of a ticket?",
+        "How much does a ticket cost?",
+        "What are the ticket prices?",
+        "Can you tell me the ticket price?"
+      ],
+      "responses": [
+        "The ticket price is $20 for adults and $10 for children.",
+        "Tickets cost $20 for adults and $10 for children.",
+        "An adult ticket is $20 and a child ticket is $10."
+      ]
+    },
+    {
+      "tag": "opening_hours",
+      "patterns": [
+        "What are the opening hours?",
+        "When is the museum open?",
+        "Can you tell me the museum's opening hours?",
+        "What time does the museum open and close?"
+      ],
+      "responses": [
+        "The museum is open from 9 AM to 5 PM from Monday to Saturday.",
+        "Our opening hours are 9 AM to 5 PM, Monday to Saturday.",
+        "We are open from 9 AM to 5 PM, Monday through Saturday."
+      ]
+    },
+    {
+      "tag": "location",
+      "patterns": [
+        "Where is the museum located?",
+        "Can you tell me the museum's address?",
+        "What is the address of the museum?",
+        "Where can I find the museum?"
+      ],
+      "responses": [
+        "The museum is located at 456 Heritage Road, New Delhi, India.",
+        "You can find us at 456 Heritage Road, New Delhi, India.",
+        "Our address is 456 Heritage Road, New Delhi, India."
+      ]
+    },
+    {
+      "tag": "exhibits",
+      "patterns": [
+        "What exhibits are currently on display?",
+        "Can you tell me about the current exhibits?",
+        "What can I see at the museum?",
+        "What exhibits do you have?"
+      ],
+      "responses": [
+        "We currently have exhibits on ancient history, modern art, and natural science.",
+        "Our current exhibits include ancient history, modern art, and natural science.",
+        "You can see exhibits on ancient history, modern art, and natural science."
+      ]
+    },
+    {
+      "tag": "guided_tours",
+      "patterns": [
+        "Do you offer guided tours?",
+        "Can I book a guided tour?",
+        "Are there guided tours available?",
+        "Tell me about guided tours"
+      ],
+      "responses": [
+        "Yes, we offer guided tours. You can book a guided tour at the ticket counter or online.",
+        "Guided tours are available. Please visit our website or the ticket counter to book one.",
+        "We have guided tours available. You can book them online or at the museum."
+      ]
+    },
+    {
+      "tag": "facilities",
+      "patterns": [
+        "What facilities are available at the museum?",
+        "Do you have a cafeteria?",
+        "Is there a gift shop?",
+        "What amenities do you offer?"
+      ],
+      "responses": [
+        "We have a cafeteria, a gift shop, and restrooms available for visitors.",
+        "Our facilities include a cafeteria, a gift shop, and restrooms.",
+        "You can find a cafeteria, a gift shop, and restrooms in the museum."
+      ]
+    },
+    {
+      "tag": "parking",
+      "patterns": [
+        "Is there parking available?",
+        "Where can I park?",
+        "Do you have parking facilities?",
+        "Is parking free?"
+      ],
+      "responses": [
+        "Yes, we have a parking lot available for visitors.",
+        "You can park in our designated parking area.",
+        "Parking is available at the museum for a small fee."
+      ]
+    },
+    {
+      "tag": "accessibility",
+      "patterns": [
+        "Is the museum wheelchair accessible?",
+        "Do you have facilities for disabled visitors?",
+        "Is there accessibility support?",
+        "Are there ramps and elevators?"
+      ],
+      "responses": [
+        "Yes, the museum is fully wheelchair accessible with ramps and elevators.",
+        "We have facilities to support disabled visitors, including ramps and elevators.",
+        "The museum is equipped with ramps and elevators for accessibility."
+      ]
+    },
+    {
+      "tag": "special_exhibits",
+      "patterns": [
+        "Are there any special exhibits?",
+        "What special exhibits are on display?",
+        "Do you have any temporary exhibits?",
+        "Tell me about the special exhibits"
+      ],
+      "responses": [
+        "We currently have a special exhibit on Renaissance art.",
+        "Our special exhibits include a temporary display on space exploration.",
+        "You can visit our special exhibit on ancient Egyptian artifacts."
+      ]
+    },
+    {
+      "tag": "events",
+      "patterns": [
+        "What events are happening at the museum?",
+        "Are there any upcoming events?",
+        "Tell me about the events at the museum",
+        "What events can I attend?"
+      ],
+      "responses": [
+        "We have several upcoming events including art workshops, history lectures, and family days. Check our website for the full schedule.",
+        "Our events include art workshops, history lectures, and family days. Visit our website for more details.",
+        "You can attend various events like art workshops, history lectures, and family days. See our website for the schedule."
+      ]
+    }
+  ]
+}
+
+
+
+
