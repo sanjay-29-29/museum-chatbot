@@ -5,7 +5,7 @@ import transformers
 import torch
 from transformers import AutoTokenizer
 from time import time
-from pyngrok import ngrok
+import ngrok
 
 app = FastAPI()
 
