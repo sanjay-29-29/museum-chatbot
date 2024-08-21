@@ -63,8 +63,6 @@ def query_model(system_message, user_message, history, temperature=0.7, max_leng
         pad_token_id=pipeline.model.config.eos_token_id
     )
     answer = sequences[0]['generated_text']
-    end_time = time()
-    ttime = f"Total time: {round(end_time-start_time, 2)} sec."
 
     return answer, messages
 
@@ -78,17 +76,13 @@ specified.Only use the provided information to answer all user queries and do no
 @app.post('/message')
 async def message(request: ValidateRequest):
     try:
+        global user_histories
         user_id = request.user_id
         user_message = request.message
-
         history = user_histories.get(user_id, [{"role": "system", "content": system_message}])
-
         response, updated_history = query_model(system_message, user_message, history)
-
         user_histories[user_id] = updated_history
-
         user_histories = user_histories[-3:]
-
         return {"response": response}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
