@@ -35,19 +35,16 @@ pipeline = transformers.pipeline(
 ngrok.set_auth_token("2dVBJw5G2bExzQ41keUUDtC0U8K_7zn55apnGM8YJ3RNsfznb")
 listener = ngrok.forward("127.0.0.1:8000", authtoken_from_env=True, domain="glowing-polite-porpoise.ngrok-free.app")
 
-user_histories = {}
 
-def query_model(system_message, user_message, history, temperature=0.7, max_length=1024):
+def query_model(system_message, user_message, temperature=0.7, max_length=1024):
     start_time = time()
     user_message = "Question: " + user_message + " Answer:"
-    messages = history + [
-        {"role": "user", "content": user_message},
-    ]
+
     prompt = pipeline.tokenizer.apply_chat_template(
-        messages, 
         tokenize=False, 
         add_generation_prompt=True
     )
+
     terminators = [
         pipeline.tokenizer.eos_token_id,
         pipeline.tokenizer.convert_tokens_to_ids("<|eot_id|>")
@@ -64,7 +61,7 @@ def query_model(system_message, user_message, history, temperature=0.7, max_leng
     )
     answer = sequences[0]['generated_text']
 
-    return answer, messages
+    return answer
 
 system_message = """
 You are a highly specialized chatbot designed exclusively to assist users with booking tickets for the KEC Museum, located in Perundurai, Erode, and managed by KEC Trust. The museum operates daily from 10:00 AM to 4:00 PM.
@@ -74,8 +71,9 @@ Instructions:
 1. When users inquire about the availability of tickets, respond with {available_slot}.
 2. The museum is known for its rich collection of artifacts from the Viking era. If users request to book tickets or ask questions related to booking, respond with {book_tickets}.
 3. The price of a ticket is Rs.50. If the user specifies the number of tickets while booking, respond with {book_ticket,no_of_tickets} where no_of_tickets is the number of tickets the user specified.
-4. Only use the provided information to answer all user queries. Do not provide any information that is not explicitly mentioned here.
-5. Do not answer any general questions unrelated to the KEC Museum or ticket booking.
+4. The accepted payments methods are Card, UPI.
+5. Only use the provided information to answer all user queries. Do not provide any information that is not explicitly mentioned here.
+6. Do not answer any general questions unrelated to the KEC Museum or ticket booking.
 
 Remember, your sole purpose is to assist with ticket bookings for the KEC Museum. Any deviation from this task is not allowed.
 """
@@ -84,11 +82,9 @@ Remember, your sole purpose is to assist with ticket bookings for the KEC Museum
 async def message(request: ValidateRequest):
     try:
         global user_histories
-        user_id = request.user_id
+
         user_message = request.message
-        history = user_histories.get(user_id, [{"role": "system", "content": system_message}])
-        response, updated_history = query_model(system_message, user_message, history)
-        user_histories[user_id] = updated_history[-3:]
+        response = query_model(system_message, user_message)
         return {"response": response}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
