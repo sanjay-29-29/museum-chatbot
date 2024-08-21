@@ -81,8 +81,7 @@ async def message(request: ValidateRequest):
         user_message = request.message
         history = user_histories.get(user_id, [{"role": "system", "content": system_message}])
         response, updated_history = query_model(system_message, user_message, history)
-        user_histories[user_id] = updated_history
-        user_histories = user_histories[-3:]
+        user_histories[user_id] = updated_history[-3:]
         return {"response": response}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
