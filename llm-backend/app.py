@@ -35,12 +35,12 @@ pipeline = transformers.pipeline(
 ngrok.set_auth_token("2dVBJw5G2bExzQ41keUUDtC0U8K_7zn55apnGM8YJ3RNsfznb")
 listener = ngrok.forward("127.0.0.1:8000", authtoken_from_env=True, domain="glowing-polite-porpoise.ngrok-free.app")
 
-
 def query_model(system_message, user_message, temperature=0.7, max_length=1024):
     start_time = time()
     user_message = "Question: " + user_message + " Answer:"
 
     prompt = pipeline.tokenizer.apply_chat_template(
+        [{"role": "system", "content": system_message}, {"role": "user", "content": user_message}],
         tokenize=False, 
         add_generation_prompt=True
     )
@@ -81,8 +81,6 @@ Remember, your sole purpose is to assist with ticket bookings for the KEC Museum
 @app.post('/message')
 async def message(request: ValidateRequest):
     try:
-        global user_histories
-
         user_message = request.message
         response = query_model(system_message, user_message)
         return {"response": response}
