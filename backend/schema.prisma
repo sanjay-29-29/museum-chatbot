@@ -13,6 +13,11 @@ model Ticket {
   quantity      Int
   creation_time DateTime
   expiry_time   DateTime
-  person_in            Int      @default(0)
-  person_out           Int      @default(0)
+  person_in     Int      @default(0)
+  person_out    Int      @default(0)
+}
+
+model Order {
+  order_id String @unique
+  quantity Int
 }

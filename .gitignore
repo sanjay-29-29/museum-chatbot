@@ -1,7 +1,0 @@
-backend/migrations
-backend/data.pth
-backend/intents.json
-backend/.env
-data.pth
-
-**/__pycache__/
