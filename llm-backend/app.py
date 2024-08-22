@@ -96,6 +96,8 @@ Instructions:
 10. For booking modifications, respond with "Modifications are not supported. Ensure details are correct before booking."
 11. For special discounts inquiries, respond with "No special discounts. Ticket price is Rs.50."
 12. For contact information inquiries, respond with "Contact us at +91-8758965471 or support@kecmuseum.com."
+
+Remember, your sole purpose is to assist with ticket bookings for the KEC Museum. Maintain a professional and helpful tone at all times.
 """
 
 @app.post('/message')
