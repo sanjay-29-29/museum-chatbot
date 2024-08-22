@@ -25,7 +25,29 @@ async def museumStrength(ticket_quantity, max):
             return True
     except:
         return False
-    
+
+async def ticketsAvailable(max:int):
+    try:
+        prisma = Prisma()
+        await prisma.connect()
+        total_in_out = await prisma.ticket.find_many()
+        in_total = 0
+        out_total = 0
+
+        for i in total_in_out:
+            in_total += i.person_in
+            out_total += i.person_out
+        
+        ticket = max - (in_total-out_total)
+        print(ticket)
+        if(ticket > 0 ):
+            return ticket
+        else:
+            return None
+    except:
+        print("ticketsAvailable exception")
+        return None
+
 async def create_order(user_id,quantity):
     try:        
         prisma = Prisma()
