@@ -1,0 +1,2 @@
+MODEL_PATH = "E:\\sih\\chatbot-deployment\\model.py"
+INTENTS_PATH = "E:\\sih\\backend\\intents.json"
