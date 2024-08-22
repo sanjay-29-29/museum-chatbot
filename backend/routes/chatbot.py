@@ -1,8 +1,8 @@
 from fastapi import HTTPException
 from fastapi.responses import JSONResponse
 from routes.model.load_model import initialize_model
-from routes.chatbot_helper.chatbot_helper import customResponse
-from routes.chatbot_helper.ticket_helper import ticketsAvailable
+from routes.chatbot_helper.chatbot_helper import customResponse, checkBookWithQnty
+from routes.chatbot_helper.ticket_helper import museumStrength, ticketsAvailable
 from models.model import ChatRequest
 import requests
 
@@ -22,7 +22,7 @@ class Chatbot():
         except KeyError:
             return {"type":"message","message": "please enter a message and user_id"}
         
-        user_state = user_states.get(user_id, {'awaiting_confirmation': False, 'no_of_tickets': False, 'payment_confirmation': False})
+        user_state = user_states.get(user_id, {'awaiting_confirmation': False, 'no_of_tickets': False, 'payment_confirmation': False, 'no_of_tickets_value':0})
 
         custom_response = await customResponse(user_state, user_states, user_id, message)
         
@@ -37,6 +37,13 @@ class Chatbot():
             print(data.status_code) 
             if(data.status_code == 200):
                 json_data = data.json()
+                checkTicketinResponse = checkBookWithQnty(json_data['response'])
+                if(checkTicketinResponse):
+                    response = await museumStrength(checkTicketinResponse,600)
+                    if response:
+                        user_states[user_id]  = {'awaiting_confirmation' : False, 'no_of_tickets': False, 'payment_confirmation': True, 'no_of_tickets_value': checkTicketinResponse} 
+                    else:
+                        return {'user':'bot',"type": "message", "message": "The museum is full right now. Please try again later"}
                 if('{book_tickets}' in json_data['response']):
                     json_data['response'] = str(json_data['response']).replace('{book_tickets}','')
                     user_states[user_id] = {'awaiting_confirmation': True, 'no_of_tickets': False,"payment_confirmation": False}

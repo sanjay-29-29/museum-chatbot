@@ -1,3 +1,4 @@
+import re
 from routes.chatbot_helper.ticket_helper import museumStrength, create_order
 
 async def customResponse(user_state,user_states,user_id, message):
@@ -29,7 +30,8 @@ async def customResponse(user_state,user_states,user_id, message):
 
             if response:
                 user_states[user_id] = {'awaiting_confirmation': False, 'no_of_tickets': False, 'payment_confirmation': True, 'no_of_tickets_value': no_of_tickets}
-                return {'user':'bot',"type": "message", "message": f"The requested amount of tickets is available. Please enter yes to proceed to payment or 'cancel' to cancel the booking."}
+                cost = user_states[user_id]['no_of_tickets_value'] * 50
+                return {'user':'bot',"type": "message", "message": f"The requested amount of tickets is available. The cost of the tickets would be Rs.{cost}. Please enter 'yes' to proceed to payment or 'cancel' to cancel the booking."}
             
             else:
                 user_states[user_id] = {'awaiting_confirmation': False, 'no_of_tickets': False, 'payment_confirmation': False, 'no_of_tickets_value': 0}
@@ -57,3 +59,11 @@ async def customResponse(user_state,user_states,user_id, message):
             print(e)
             user_states[user_id] = {'awaiting_confirmation': False, 'no_of_tickets': False, 'payment_confirmation': False, 'no_of_tickets_value': 0}
             return {'user':'bot','type': 'message', 'message': 'Unexpected error has happened'}
+
+def checkBookWithQnty(s):
+    pattern = r'\{"[a-zA-Z]",(\d+)\}'
+    match = re.search(pattern, s)
+    if match:
+        return int(match.group(1))
+    return None
+

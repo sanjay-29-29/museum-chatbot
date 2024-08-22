@@ -119,9 +119,9 @@ const UserMessageBubble = ({ message }) => {
 const LoadingBubble = () => {
   return (
     <div>
-      <div className="ml-5 font-medium text-black">Assistant</div>
+      <div className="ml-3 font-medium text-black">Assistant</div>
       <pre className="bg-[#334155] text-white m-3 font-sans rounded-t-3xl rounded-br-3xl p-3 text-wrap shadow-lg max-w-[70%] bubble">
-        <p className="loading-bubble rounded-t-3xl rounded-br-3xl p-3 shadow-lg max-w-[70%] bubble">Loading</p>
+        <p className="loading-bubble bubble">Loading</p>
       </pre>
     </div>
   );
@@ -254,7 +254,6 @@ function App() {
           <div className="h-[8vh] bg-[#0f172a] rounded-t-xl flex items-center justify-center shadow-md">
             <div className="text-white text-2xl font-bold">Museo-Mate</div>
           </div>
-
           <div className="h-[72vh] flex-grow rounded-b-xl grid bg-white">
             <div className="overflow-y-auto h-[65vh] flex flex-col p-2 space-y-2">
               {messages.map((item, index) => {
@@ -300,7 +299,7 @@ function App() {
                 type = 'submit'
                 onClick={sendMessage}
                 disabled={disableInput}
-                className="ml-2 rounded-lg w-10 h-10 flex items-center justify-center bg-[#94a3b8] hover:bg-[#3f3f46] text-[#d4d4d8] shadow-lg transition-colors duration-300 ease-in-out">
+                className="ml-2 rounded-lg w-10 h-10 flex items-center justify-center hover:bg-[#94a3b8] bg-[#3f3f46] text-[#d4d4d8] shadow-lg transition-colors duration-300 ease-in-out">
                 <FontAwesomeIcon icon={faPaperPlane} color="#d4d4d8" />
               </button>
             </form> 
