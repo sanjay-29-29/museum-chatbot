@@ -44,12 +44,15 @@ async def customResponse(user_state,user_states,user_id, message):
             return {'user':'bot',"type": "message", "message": "Booking has been cancelled."}
         
         try:
-            no_of_tickets = user_state['no_of_tickets_value']
-            user_states[user_id] = {'awaiting_confirmation': False, 'no_of_tickets': False, 'payment_confirmation': False, 'no_of_tickets_value': 0}
-            data = await create_order(user_id, no_of_tickets)
-            print(data)
-            return {'user':'bot',"type": "order_id", "message": data}
-        
+            if 'yes' in message.lower():
+                no_of_tickets = user_state['no_of_tickets_value']
+                user_states[user_id] = {'awaiting_confirmation': False, 'no_of_tickets': False, 'payment_confirmation': False, 'no_of_tickets_value': 0}
+                data = await create_order(user_id, no_of_tickets)
+                print(data)
+                return {'user':'bot',"type": "order_id", "message": data}
+            else:
+                return {'user':'bot',"type":"message","message":"Please enter a valid response"}
+
         except Exception as e:
             print(e)
             user_states[user_id] = {'awaiting_confirmation': False, 'no_of_tickets': False, 'payment_confirmation': False, 'no_of_tickets_value': 0}

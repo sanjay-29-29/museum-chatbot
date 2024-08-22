@@ -8,6 +8,7 @@ import {
 import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
+import razor from './assets/razor.jpeg'
 
 const PaymentMessageBubble = ({ order_id, setMessages }) => {
   const handlePayment = () => {
@@ -86,37 +87,42 @@ const PaymentMessageBubble = ({ order_id, setMessages }) => {
 
   return (
     <button
-      onClick={handlePayment}
-      className="mr-auto ml-2 text-left rounded-lg p-2 flex flex-row items-center justify-start bg-gradient-to-r from-purple-700 to-purple-900 hover:from-purple-800 hover:to-purple-900 text-white shadow-lg transition-colors duration-300 ease-in-out"
-    >
-      Payment
+      onClick={handlePayment}>
+      <img
+        src={razor}
+        className="h-[5vh] rounded-md ml-2 border-2 hover:shadow-lg border-black w-[8vw]"
+      />
     </button>
   );
 };
 
 const BotMessageBubble = ({ message }) => {
   return (
-    <div className="bg-[#334155] text-white m-2 rounded-t-3xl rounded-br-3xl p-3 shadow-lg max-w-[70%] bubble">
-      <div className="font-semibold text-white">Assistant</div>
-      <p>{message}</p>
+    <div>
+      <div className="ml-5 font-medium text-black">Assistant</div>
+      <pre className="bg-[#334155] text-white m-3 font-sans rounded-t-3xl rounded-br-3xl p-3 text-wrap shadow-lg max-w-[70%] bubble">
+        <p>{message}</p>
+      </pre>
     </div>
   );
 };
 
 const UserMessageBubble = ({ message }) => {
   return (
-    <div className="bg-[#6b7280] text-white m-2 rounded-t-2xl rounded-bl-2xl p-3 shadow-lg max-w-[70%] ml-auto bubble">
-      <div className="font-bold text-gray-700">You</div>
-      <p>{message}</p>
+    <div className="max-w-[70%] ml-auto">
+      <div className="m-2">User</div>
+      <p className="bg-[#6b7280] text-white m-2 rounded-t-2xl rounded-bl-2xl p-3 shadow-lg bubble">{message}</p>
     </div>
   );
 };
 
 const LoadingBubble = () => {
   return (
-    <div className="bg-[#334155] text-white m-2 rounded-t-3xl rounded-br-3xl p-3 shadow-lg max-w-[70%] bubble">
-      <div className="font-semibold text-white">Assistant</div>
-      <p className="loading-bubble">Loading</p>
+    <div>
+      <div className="ml-5 font-medium text-black">Assistant</div>
+      <pre className="bg-[#334155] text-white m-3 font-sans rounded-t-3xl rounded-br-3xl p-3 text-wrap shadow-lg max-w-[70%] bubble">
+        <p className="loading-bubble rounded-t-3xl rounded-br-3xl p-3 shadow-lg max-w-[70%] bubble">Loading</p>
+      </pre>
     </div>
   );
 };
@@ -125,8 +131,8 @@ const DownloadTicket = ({ pdfBase64 }) => {
   const handleDownload = () => {
     const byteCharacters = atob(pdfBase64);
     const byteNumbers = new Array(byteCharacters.length)
-      .fill()
-      .map((_, i) => byteCharacters.charCodeAt(i));
+    .fill()
+    .map((_, i) => byteCharacters.charCodeAt(i));
     const byteArray = new Uint8Array(byteNumbers);
     const blob = new Blob([byteArray], { type: "application/pdf" });
 
@@ -143,7 +149,7 @@ const DownloadTicket = ({ pdfBase64 }) => {
   return (
     <button
       onClick={handleDownload}
-      className="mr-auto ml-2 text-left rounded-lg p-2 flex flex-row items-center justify-start bg-gradient-to-r from-teal-500 via-purple-600 to-blue-700 hover:opacity-90"
+      className="mr-auto ml-2 text-left rounded-lg p-2 flex flex-row items-center justify-start bg-[#334155] text-white" 
     >
       <div className="text-base mr-2 font-light">Ticket.pdf</div>
       <FontAwesomeIcon icon={faFileDownload} color="white" />
@@ -244,7 +250,7 @@ function App() {
         <FontAwesomeIcon icon={faMessage} color="white" />
       </button>
       {visible && (
-        <div className="absolute bg-gradient-to-b from-[#1a003a] to-black sm:right-[2vw] sm:bottom-[12vh] h-[80vh] w-[40vh] rounded-xl bottom-[11vh] right-4 shadow-2xl border border-gray-700">
+        <div className="absolute bg-gradient-to-b from-[#1a003a] to-black sm:right-[2vw] sm:bottom-[12vh] h-[80vh] w-[25vw] rounded-xl bottom-[11vh] right-4 shadow-2xl border border-gray-700">
           <div className="h-[8vh] bg-[#0f172a] rounded-t-xl flex items-center justify-center shadow-md">
             <div className="text-white text-2xl font-bold">Museo-Mate</div>
           </div>
@@ -281,23 +287,23 @@ function App() {
               })}
               <div ref={messageEndRef}></div>
             </div>
-              <form onSubmit={sendMessage} className="flex flex-row items-center p-2">
-                <input
-                  onChange={(e)=>{setInput(e.target.value)}}
-                  type="text"
-                  disabled = {disableInput}
-                  value={input}
-                  placeholder="Enter your message"
-                  className="p-2 flex-grow rounded-lg border border-gray-600 bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-black"
-                />
-                <button
-                  type = 'submit'
-                  onClick={sendMessage}
-                  disabled={disableInput}
-                  className="ml-2 rounded-lg w-10 h-10 flex items-center justify-center bg-[#94a3b8] hover:bg-[#3f3f46] text-[#d4d4d8] shadow-lg transition-colors duration-300 ease-in-out">
-                  <FontAwesomeIcon icon={faPaperPlane} color="#d4d4d8" />
-                </button>
-              </form> 
+            <form onSubmit={sendMessage} className="flex flex-row items-center p-2">
+              <input
+                onChange={(e)=>{setInput(e.target.value)}}
+                type="text"
+                disabled = {disableInput}
+                value={input}
+                placeholder="Enter your message"
+                className="p-2 flex-grow rounded-lg border border-gray-600 bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-black"
+              />
+              <button
+                type = 'submit'
+                onClick={sendMessage}
+                disabled={disableInput}
+                className="ml-2 rounded-lg w-10 h-10 flex items-center justify-center bg-[#94a3b8] hover:bg-[#3f3f46] text-[#d4d4d8] shadow-lg transition-colors duration-300 ease-in-out">
+                <FontAwesomeIcon icon={faPaperPlane} color="#d4d4d8" />
+              </button>
+            </form> 
           </div>
         </div>
       )}

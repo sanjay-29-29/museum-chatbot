@@ -10,7 +10,7 @@ def initialize_model():
     with open(os.getenv('INTENTS_PATH'), 'r') as json_data:
         intents = json.load(json_data)
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    data = torch.load(os.getenv('MODEL_PATH'))
+    data = torch.load(os.getenv('MODEL_PATH'), map_location=device)
     input_size = data["input_size"]
     hidden_size = data["hidden_size"]
     output_size = data["output_size"]
