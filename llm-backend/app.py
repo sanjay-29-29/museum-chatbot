@@ -21,7 +21,7 @@ app.add_middleware(
     allow_headers=["*"], 
 )
 
-model = "/kaggle/input/llama-3/transformers/8b-chat-hf/1"
+model = "/kaggle/input/llama-3/pytorch/8b-chat/1"
 
 tokenizer = AutoTokenizer.from_pretrained(model)
 
