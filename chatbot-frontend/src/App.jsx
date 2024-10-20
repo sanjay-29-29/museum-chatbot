@@ -206,6 +206,7 @@ function App() {
         {
           message: input,
           user_id: userId,
+          prompt: "museum"
         }
       );
       if (response.status === 200) {
