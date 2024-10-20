@@ -12,6 +12,7 @@ app = FastAPI()
 class ValidateRequest(BaseModel):
     user_id: str
     message: str
+    system_message: str
 
 app.add_middleware(
     CORSMiddleware,
@@ -35,25 +36,32 @@ pipeline = transformers.pipeline(
 ngrok.set_auth_token("2dVBJw5G2bExzQ41keUUDtC0U8K_7zn55apnGM8YJ3RNsfznb")
 listener = ngrok.forward("127.0.0.1:8000", authtoken_from_env=True, domain="glowing-polite-porpoise.ngrok-free.app")
 
-user_histories = {}
+conversation_history = {}
 
-def query_model(system_message, user_message, history, temperature=0.7, max_length=1024):
+def query_model(system_message, user_id, user_message, temperature=0.7, max_length=1024):
     start_time = time()
     user_message = "Question: " + user_message + " Answer:"
-    messages = history + [
-        {"role": "user", "content": user_message},
-    ]
-    prompt = pipeline.tokenizer.apply_chat_template(
-        messages, 
+
+    if user_id not in conversation_history:
+        conversation_history[user_id] = []
+    conversation_history[user_id].append({"role": "user", "content": user_message})
+
+    conversation_history[user_id] = conversation_history[user_id][-3:]
+
+    prompt = [{"role": "system", "content": system_message}] + conversation_history[user_id]
+
+    prompt_text = pipeline.tokenizer.apply_chat_template(
+        prompt,
         tokenize=False, 
         add_generation_prompt=True
     )
+
     terminators = [
         pipeline.tokenizer.eos_token_id,
         pipeline.tokenizer.convert_tokens_to_ids("<|eot_id|>")
     ]
     sequences = pipeline(
-        prompt,
+        prompt_text,
         do_sample=True,
         top_p=0.9,
         temperature=temperature,
@@ -64,25 +72,17 @@ def query_model(system_message, user_message, history, temperature=0.7, max_leng
     )
     answer = sequences[0]['generated_text']
 
-    return answer, messages
+    conversation_history[user_id].append({"role": "assistant", "content": answer})
 
-system_message = """
-You are a chatbot designed to assist users with booking tickets for the KEC Museum, located in Perundurai, Erode and is managed by KEC Trust. The museum operates daily from 10:00 AM to 4:00 PM.
-When users inquire about the availability of tickets, respond with {available_slot}. The mueseum is known for rich collection of artifacts of viking era. If users request to book tickets or ask 
-questions related to booking, respond with {book_tickets}. If the user specifies the number of ticket while booking respond with {book_ticket,no_of_tickets} where no_of_tickets is the tickets user 
-specified.Only use the provided information to answer all user queries and do not halucinate. 
-"""
+    return answer
 
 @app.post('/message')
 async def message(request: ValidateRequest):
     try:
-        global user_histories
         user_id = request.user_id
         user_message = request.message
-        history = user_histories.get(user_id, [{"role": "system", "content": system_message}])
-        response, updated_history = query_model(system_message, user_message, history)
-        user_histories[user_id] = updated_history
-        user_histories = user_histories[-3:]
+        system_message = request.system_message
+        response = query_model(system_message, user_id, user_message)
         return {"response": response}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

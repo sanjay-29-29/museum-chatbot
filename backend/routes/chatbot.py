@@ -48,7 +48,7 @@ class Chatbot():
                     json_data['response'] = str(json_data['response']).replace('{book_tickets}','')
                     user_states[user_id] = {'awaiting_confirmation': True, 'no_of_tickets': False,"payment_confirmation": False}
                     # todo prompt llm properly 
-                    return {'user':'bot',"type":"message","message":json_data['response'] + ' Please enter "yes" to continue or "no" to cancel the process.'} 
+                    return {'user':'bot',"type":"message","message":json_data['response'] + "To continue with the booking process please respond with 'yes' to continue or 'no' to cancel the process."} 
                    
                 if('{available_slot}' in json_data['response']):
                     ticket_qty = await ticketsAvailable(750)
