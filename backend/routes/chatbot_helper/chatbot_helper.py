@@ -14,7 +14,7 @@ async def customResponse(user_state,user_states,user_id, message):
             return {'user':'bot',"type": "message", "message": "Okay, let me know if you need anything else."}
         
         else:
-            return {'user':'bot',"type": "message", "message": "Please respond with 'yes' or 'no'."}
+            return {'user':'bot',"type": "message", "message": "To continue with the booking process please respond with 'yes' to continue or 'no' to cancel the process."}
 
     if user_state['no_of_tickets']:
         if 'cancel' in message.lower():
@@ -61,7 +61,7 @@ async def customResponse(user_state,user_states,user_id, message):
             return {'user':'bot','type': 'message', 'message': 'Unexpected error has happened'}
 
 def checkBookWithQnty(s):
-    pattern = r'\{"[a-zA-Z]",(\d+)\}'
+    pattern = r'\{book_ticket,\d+\}' 
     match = re.search(pattern, s)
     if match:
         return int(match.group(1))

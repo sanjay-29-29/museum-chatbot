@@ -31,14 +31,12 @@ async def ticketsAvailable(max:int):
         prisma = Prisma()
         await prisma.connect()
         total_in_out = await prisma.ticket.find_many()
-        in_total = 0
-        out_total = 0
+        totalQuantity = 0 
 
         for i in total_in_out:
-            in_total += i.person_in
-            out_total += i.person_out
-        
-        ticket = max - (in_total-out_total)
+            totalQuantity += i.quantity
+
+        ticket = max - totalQuantity 
         print(ticket)
         if(ticket > 0 ):
             return ticket
